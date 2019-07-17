@@ -1,9 +1,4 @@
-################################################################################
-# We will use multi-stage builds in our `Dockerfile` to optimize both build time 
-#  and image size.  The first thing to add to the `Dockerfile` is the stage that 
-#  compiles and packages the Java application.  
-################################################################################
-
+## Builder stage
 FROM openjdk:7 as builder
 
 WORKDIR /springtrader
@@ -24,10 +19,7 @@ COPY tools tools
 
 RUN ./gradlew clean build release
 
-################################################################################
-# Create a base image with the various VMware vFabric middleware components.  
-################################################################################
-
+## vFabric base stage
 FROM centos:centos6 as vfabric
 ENV JAVA_HOME=/usr
 
@@ -40,11 +32,7 @@ RUN mkdir -p /etc/vmware/vfabric/ && \
 RUN rpm -ivhf http://repo.vmware.com/pub/rhel6/vfabric/5.1/vfabric-5.1-repo-5.1-1.noarch.rpm && \
     yum install wget unzip java-1.7.0-openjdk-devel vfabric-tc-server-standard -y
 
-################################################################################
-# Stage for VMware vFabric application server and copy our build artifacts 
-#  from the `builder` stage.  
-################################################################################
-
+## vFabric appserver stage
 FROM vfabric as runner
 
 # Install Groovy
@@ -80,10 +68,6 @@ ENTRYPOINT echo 'createSqlfSchema' && \
            echo 'SPRINGTRADER RUN' && \
            /opt/vmware/vfabric-tc-server-standard/springtrader/bin/tcruntime-ctl.sh run springtrader
 
-
-################################################################################
-# Stage for the SQLFire database component.  
-################################################################################
-
+## SQLFire stage
 FROM vfabric as sqlfdb
 RUN yum install vfabric-sqlfire -y
