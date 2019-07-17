@@ -27,6 +27,8 @@ deploy:
         values:
           image: springtrader 
           sqlfdb: sqlfdb 
+        setValueTemplates:
+          domain: "{{if .DOMAIN}{{.DOMAIN}}{{else}}default{{end}}"
 profiles:
 - name: microk8s
   activation:
