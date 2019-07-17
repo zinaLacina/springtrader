@@ -8,6 +8,7 @@ charts/**/*
 .git/**/*
 .dockerignore
 .gitignore
-.cache
 .*.swp
 **/.*.swp
+.cache
+.cache/*
