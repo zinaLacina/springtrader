@@ -23,8 +23,12 @@ deploy:
         values:
           image: springtrader 
           sqlfdb: sqlfdb 
-portForward:
-- resourceType: service
-  resourceName: springtrader-app
-  port: 8080
-  localPort: 8081
+profiles:
+- name: microk8s
+  activation:
+  - kubeContext: microk8s
+  patches:
+  - op: add
+    path: /deploy/helm/releases/0/setValues
+    value: 
+      storageClassName: microk8s-hostpath
