@@ -1,5 +1,6 @@
 Dockerfile
 skaffold.yml
+skaffold.yaml
 Jenkinsfile
 charts
 charts/**/*
