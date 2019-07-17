@@ -23,3 +23,8 @@ deploy:
         values:
           image: springtrader 
           sqlfdb: sqlfdb 
+portForward:
+- resourceType: service
+  resourceName: springtrader-app
+  port: 8080
+  localPort: 8081
