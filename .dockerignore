@@ -1,0 +1,9 @@
+Dockerfile
+skaffold.yml
+Jenkinsfile
+charts
+charts/**/*
+.git
+.git/**/*
+.dockerignore
+.gitignore
