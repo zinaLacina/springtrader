@@ -7,7 +7,7 @@ spec:
     istio: ingressgateway
   servers:
   - hosts:
-    - "{{ .Chart.Name }}.{{ .Values.domain | default 'local' }}"
+    - {{ .Chart.Name }}.{{ .Values.domain | default "local" }}
     port:
       name: http
       number: 80
@@ -15,7 +15,7 @@ spec:
     tls:
       httpsRedirect: true
   - hosts:
-    - "{{ .Chart.Name }}.{{ .Values.domain | default 'local' }}"
+    - {{ .Chart.Name }}.{{ .Values.domain | default "local" }}
     port:
       name: https-default
       number: 443
@@ -32,7 +32,7 @@ metadata:
   name: "{{ .Chart.Name }}"
 spec:
   hosts:
-  - "{{ .Chart.Name }}.{{ .Values.domain | default 'local' }}"
+  - {{ .Chart.Name }}.{{ .Values.domain | default "local" }}
   gateways:
   - "{{ .Chart.Name }}-gateway"
   http:
