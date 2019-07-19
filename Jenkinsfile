@@ -4,6 +4,7 @@ pipeline {
     label "lead-toolchain-skaffold"
   }
   stages {
+    /// [build]
     stage('Build') {
       steps {
         notifyPipelineStart()
@@ -21,7 +22,9 @@ pipeline {
         }
       }
     }
+    /// [build]
 
+    /// [stage]
     stage ('Deploy to Staging') {
       environment {
         TILLER_NAMESPACE = "${env.stagingNamespace}"
@@ -42,7 +45,9 @@ pipeline {
         }
       }
     }
-    
+    /// [stage]
+
+    /// [gate]
     stage ('Manual Ready Check') {
       when {
         branch 'master'
@@ -54,7 +59,9 @@ pipeline {
         echo "Deploying"
       }
     }
+    /// [gate]
 
+    /// [prod]
     stage ('Deploy to Production') {
       when {
           branch 'master'
@@ -78,5 +85,6 @@ pipeline {
         }
       }
     }
+    /// [prod]
   }
 }
