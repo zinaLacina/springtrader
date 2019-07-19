@@ -33,7 +33,7 @@ spec:
       - name: generate-data
         image: {{ .Values.image }}
         command: ["/bin/sh","-c"]
-        args: ["sed -i 's/localhost/springtrader/g' nanotrader.properties && ./generateData"]
+        args: ["sed -i 's/localhost/springtrader/g' nanotrader.sqlf.properties && ./generateData"]
         env:
         - name: GROOVY_HOME
           value: '/usr/bin'
