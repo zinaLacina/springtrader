@@ -1,20 +1,30 @@
 apiVersion: v1
 kind: Service
 metadata:
+<<<<<<< HEAD
  name: springtrader-app
 spec:
  selector:
    app: springtrader-app
+=======
+ name: springtrader
+spec:
+ selector:
+   app: springtrader
+>>>>>>> c54e117a9cfe155fe12497f758b7a46f80d915ee
  ports:
  - name: frontend
    port: 8080
    targetPort: 8080
+<<<<<<< HEAD
  - name: dblocator
    port: 1527
    targetPort: 1527
  - name: dbserver
    port: 1528
    targetPort: 1528
+=======
+>>>>>>> c54e117a9cfe155fe12497f758b7a46f80d915ee
  - name: epmd
    port: 4369
    targetPort: 4369
@@ -27,4 +37,23 @@ spec:
  - name: management
    port: 15672
    targetPort: 15672
+<<<<<<< HEAD
+=======
+ type: ClusterIP
+---
+apiVersion: v1
+kind: Service
+metadata:
+ name: nanodbserver
+spec:
+ selector:
+   app: nanodbserver
+ ports:
+ - name: dblocator
+   port: 1527
+   targetPort: 1527
+ - name: dbserver
+   port: 1528
+   targetPort: 1528
+>>>>>>> c54e117a9cfe155fe12497f758b7a46f80d915ee
  type: ClusterIP

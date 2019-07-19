@@ -1,11 +1,16 @@
 apiVersion: batch/v1
 kind: Job
 metadata:
+<<<<<<< HEAD
   name: sqlcheck
+=======
+  name: generate-schema
+>>>>>>> c54e117a9cfe155fe12497f758b7a46f80d915ee
 spec:
   template:
     spec:
       initContainers:
+<<<<<<< HEAD
       - name: init-sqlcheck
         image: {{ .Values.image }}
         command: ["/bin/sh","-c"]
@@ -15,6 +20,36 @@ spec:
         image: {{ .Values.image }}
         command: ["/bin/sh","-c"]
         args: ["sed -i 's/localhost/springtrader-app/g' nanotrader.properties && ./generateData"]
+=======
+      - name: wait-for-nanodbserver
+        image: bitnami/kubectl:1.15
+        args: ['wait','--for=condition=ready','pod/nanodbserver-0','--timeout=300s']
+      containers:
+      - name: generate-schema
+        image: {{ .Values.image }}
+        command: ['sh','-c','./createSqlfSchema']
+        env:
+        - name: GROOVY_HOME
+          value: '/usr/bin'
+      restartPolicy: OnFailure
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: generate-data
+spec:
+  template:
+    spec:
+      initContainers:
+      - name: wait-for-springtrader
+        image: bitnami/kubectl:1.15
+        args: ['wait','--for=condition=available','deploy/springtrader','--timeout=300s']
+      containers:
+      - name: generate-data
+        image: {{ .Values.image }}
+        command: ["/bin/sh","-c"]
+        args: ["sed -i 's/localhost/springtrader/g' nanotrader.sqlf.properties && ./generateData"]
+>>>>>>> c54e117a9cfe155fe12497f758b7a46f80d915ee
         env:
         - name: GROOVY_HOME
           value: '/usr/bin'

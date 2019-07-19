@@ -24,6 +24,7 @@ deploy:
     releases:
       - name: springtrader 
         chartPath: ./charts/springtrader
+<<<<<<< HEAD
         values:
           image: springtrader 
           sqlfdb: sqlfdb 
@@ -32,6 +33,14 @@ deploy:
         setValueTemplates:
           domain: "{{if .DOMAIN}}{{.DOMAIN}}{{else}}default{{end}}"
 
+=======
+        wait: true
+        values:
+          image: springtrader 
+          sqlfdb: sqlfdb 
+        setValueTemplates:
+          istioDomain: "{{.ISTIO_DOMAIN}}"
+>>>>>>> c54e117a9cfe155fe12497f758b7a46f80d915ee
 profiles:
 - name: microk8s
   activation:
@@ -41,4 +50,8 @@ profiles:
     path: /deploy/helm/releases/0/setValues
     value: 
       storageClassName: microk8s-hostpath
+<<<<<<< HEAD
 ### [deploy] 
+=======
+### [deploy] 
+>>>>>>> c54e117a9cfe155fe12497f758b7a46f80d915ee
