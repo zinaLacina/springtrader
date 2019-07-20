@@ -1,7 +1,4 @@
-<<<<<<< HEAD
-=======
 {{- if not (eq .Values.istioDomain "<no value>") -}}
->>>>>>> c54e117a9cfe155fe12497f758b7a46f80d915ee
 apiVersion: networking.istio.io/v1alpha3
 kind: Gateway
 metadata:
@@ -11,11 +8,7 @@ spec:
     istio: ingressgateway
   servers:
   - hosts:
-<<<<<<< HEAD
-    - {{ .Chart.Name }}.{{ .Values.domain | default "local" }}
-=======
     - {{ .Chart.Name }}.{{ .Values.istioDomain }}
->>>>>>> c54e117a9cfe155fe12497f758b7a46f80d915ee
     port:
       name: http
       number: 80
@@ -23,11 +16,7 @@ spec:
     tls:
       httpsRedirect: true
   - hosts:
-<<<<<<< HEAD
-    - {{ .Chart.Name }}.{{ .Values.domain | default "local" }}
-=======
     - {{ .Chart.Name }}.{{ .Values.istioDomain }}
->>>>>>> c54e117a9cfe155fe12497f758b7a46f80d915ee
     port:
       name: https-default
       number: 443
@@ -44,23 +33,13 @@ metadata:
   name: "{{ .Chart.Name }}"
 spec:
   hosts:
-<<<<<<< HEAD
-  - {{ .Chart.Name }}.{{ .Values.domain | default "local" }}
-=======
   - {{ .Chart.Name }}.{{ .Values.istioDomain }}
->>>>>>> c54e117a9cfe155fe12497f758b7a46f80d915ee
   gateways:
   - "{{ .Chart.Name }}-gateway"
   http:
   - route:
     - destination:
-<<<<<<< HEAD
-        host: springtrader-app
-        port:
-          number: 8080
-=======
         host: springtrader
         port:
           number: 8080
 {{- end }}
->>>>>>> c54e117a9cfe155fe12497f758b7a46f80d915ee

@@ -123,22 +123,6 @@ def sellOrders() {
 }
 
 def checkForData() {
-<<<<<<< HEAD
-  def url = 'jdbc:sqlfire://nanodbserver:1527'
-  def sqlf = Sql.newInstance(url, 'nanotrader', 'nanotrader', 'com.vmware.sqlfire.jdbc.ClientDriver')
-  sqlf.query('SELECT * FROM ACCOUNT') { resultSet ->
-    if(resultSet.next()){
-      return true
-    }
-    return false
-  }
-
-  sqlf.close()
-}
-
-loadProps()
-// createQuotes()
-=======
   def url = p.dbURLPrefix + p.dbHost + ":" + p.dbPort
   def sqlf = Sql.newInstance(url, p.dbUser, p.dbPasswd, p.dbDriver)
   def dataExists = true
@@ -155,7 +139,6 @@ loadProps()
 }
 
 loadProps()
->>>>>>> c54e117a9cfe155fe12497f758b7a46f80d915ee
 if(checkForData()){
   return
 }

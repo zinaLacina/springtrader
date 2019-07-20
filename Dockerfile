@@ -68,14 +68,7 @@ COPY --from=builder /springtrader/dist/spring-nanotrader-web-1.0.1.BUILD-SNAPSHO
 
 WORKDIR /app
 
-<<<<<<< HEAD
-ENTRYPOINT echo 'createSqlfSchema' && \
-           ./createSqlfSchema && \
-           echo 'SPRINGTRADER RUN' && \
-           /opt/vmware/vfabric-tc-server-standard/springtrader/bin/tcruntime-ctl.sh run springtrader
-=======
 ENTRYPOINT /opt/vmware/vfabric-tc-server-standard/springtrader/bin/tcruntime-ctl.sh run springtrader
->>>>>>> c54e117a9cfe155fe12497f758b7a46f80d915ee
 ### [runner] 
 
 ### [sqlfdb] 

@@ -1,6 +1,7 @@
 import groovy.sql.Sql
 import org.apache.tools.ant.taskdefs.SQLExec
 import org.apache.tools.ant.Project
+
 def loadProps() {
   def props = new Properties()
   new File("nanotrader.sqlf.properties").withInputStream {
@@ -16,11 +17,7 @@ def createSchema() {
   Project project = new Project();
   project.init()
   project.setName("Nanotrader DB Creation")
-<<<<<<< HEAD
-
-=======
   
->>>>>>> c54e117a9cfe155fe12497f758b7a46f80d915ee
   //Check if nanotrader table exists
   def url = p.dbURLPrefix + p.dbHost + ":" + p.dbPort
   def sqlf = Sql.newInstance(url, p.dbUser, p.dbPasswd, p.dbDriver)
@@ -33,11 +30,7 @@ def createSchema() {
   }
   println 'DOES NOT EXIST: CREATING'
   sqlf.close()
-<<<<<<< HEAD
-
-=======
   
->>>>>>> c54e117a9cfe155fe12497f758b7a46f80d915ee
   // Create Tables and sequences
   SQLExec sqlExec = new SQLExec();
   SQLExec.OnError onError = new SQLExec.OnError();
