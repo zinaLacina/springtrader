@@ -26,6 +26,9 @@ pipeline {
 
     /// [stage]
     stage ('Deploy to Staging') {
+      when {
+          branch 'master'
+      }
       environment {
         TILLER_NAMESPACE = "${env.stagingNamespace}"
         ISTIO_DOMAIN   = "${env.stagingDomain}"
