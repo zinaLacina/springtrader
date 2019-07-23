@@ -21,6 +21,8 @@ build:
 ### [deploy] 
 deploy:
   helm:
+    flags:
+      global: ["--timeout", "600"]
     releases:
       - name: springtrader 
         chartPath: ./charts/springtrader
