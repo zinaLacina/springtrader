@@ -22,7 +22,8 @@ build:
 deploy:
   helm:
     flags:
-      global: ["--timeout", "600"]
+      upgrade: ["--timeout", "600"]
+      install: ["--timeout", "600"]
     releases:
       - name: springtrader 
         chartPath: ./charts/springtrader
