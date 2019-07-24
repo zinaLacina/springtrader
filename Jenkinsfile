@@ -93,4 +93,14 @@ pipeline {
     }
     /// [prod]
   }
+  post {
+    success {
+      echo "Pipeline Success"
+      notifyPipelineEnd()
+    }
+    failure {
+      echo "Pipeline Fail"
+      notifyPipelineEnd([result: "fail"])
+    }
+  }
 }
