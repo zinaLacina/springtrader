@@ -10,7 +10,7 @@ pipeline {
         notifyPipelineStart()
         notifyStageStart()
         container('skaffold') {
-          sh "skaffold build --quiet > image.json"
+          sh "skaffold build --file-output=image.json"
         }
       }
       post {
@@ -18,14 +18,14 @@ pipeline {
           notifyStageEnd()
         }
         failure {
-          notifyStageEnd([result: "build failed"])
+          notifyStageEnd([result: "Build Failed"])
         }
       }
     }
     /// [build]
 
     /// [stage]
-    stage ('Deploy to Staging') {
+    stage("Deploy to Staging") {
       when {
           branch 'master'
       }
@@ -41,10 +41,10 @@ pipeline {
       }
       post {
         success {
-          notifyStageEnd([status: "Successfully deployed to Staging: ${env.stagingDomain}"])
+          notifyStageEnd([status: "Successfully deployed to staging:\nspringtrader.${env.stagingDomain}/spring-nanotrader-web/"])
         }
         failure {
-          notifyStageEnd([result: "Failed to deploy to Staging"])
+          notifyStageEnd([result: "Deploy failed"])
         }
       }
     }
@@ -54,6 +54,9 @@ pipeline {
     stage ('Manual Ready Check') {
       when {
         branch 'master'
+      }
+      options {
+        timeout(time: 30, unit: 'MINUTES')
       }
       input {
         message 'Deploy to Production?'
@@ -65,7 +68,7 @@ pipeline {
     /// [gate]
 
     /// [prod]
-    stage ('Deploy to Production') {
+    stage("Deploy to Production") {
       when {
           branch 'master'
       }
@@ -81,10 +84,10 @@ pipeline {
       }
       post {
         success {
-          notifyStageEnd([status: "Successfully deployed to Production: ${env.productionNamespace}"])
+          notifyStageEnd([status: "Successfully deployed to production:\nspringtrader.${env.productionNamespace}/spring-nanotrader-web/"])
         }
         failure {
-          notifyStageEnd([result: "Failed to deploy to Production"])
+          notifyStageEnd([result: "fail"])
         }
       }
     }
