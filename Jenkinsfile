@@ -1,16 +1,18 @@
 library 'LEAD'
 pipeline {
-  agent {
-    label "lead-toolchain-skaffold"
-  }
+  agent none
   stages {
     /// [build]
     stage('Build') {
+      agent {
+        label "lead-toolchain-skaffold"
+      }
       steps {
         notifyPipelineStart()
         notifyStageStart()
         container('skaffold') {
           sh "skaffold build --file-output=image.json"
+          stash includes: 'image.json', name: 'build'
         }
       }
       post {
@@ -26,6 +28,9 @@ pipeline {
 
     /// [stage]
     stage("Deploy to Staging") {
+      agent {
+        label "lead-toolchain-skaffold"
+      }
       when {
           branch 'master'
       }
@@ -36,6 +41,7 @@ pipeline {
       steps {
         notifyStageStart()
         container('skaffold') {
+          unstash 'build'
           sh "skaffold deploy -a image.json -n ${TILLER_NAMESPACE}"
         }
       }
@@ -52,6 +58,7 @@ pipeline {
 
     /// [gate]
     stage ('Manual Ready Check') {
+      agent none
       when {
         branch 'master'
       }
@@ -69,6 +76,9 @@ pipeline {
 
     /// [prod]
     stage("Deploy to Production") {
+      agent {
+        label "lead-toolchain-skaffold"
+      }
       when {
           branch 'master'
       }
@@ -79,6 +89,7 @@ pipeline {
       steps {
         notifyStageStart()
         container('skaffold') {
+          unstash 'build'
           sh "skaffold deploy -a image.json -n ${TILLER_NAMESPACE}"
         }
       }
