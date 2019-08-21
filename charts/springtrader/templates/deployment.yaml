@@ -47,6 +47,18 @@ spec:
             port: 8080
           initialDelaySeconds: 30
           timeoutSeconds: 5
+        livenessProbe:
+          httpGet:
+            path: /spring-nanotrader-services/api/marketSummary
+            port: 8080
+          initialDelaySeconds: 90
+          timeoutSeconds: 5
+        readinessProbe:
+          httpGet:
+            path: /spring-nanotrader-services/api/marketSummary
+            port: 8080
+          initialDelaySeconds: 90
+          timeoutSeconds: 5
       - name: rabbitmq
         image: rabbitmq
         resources:
