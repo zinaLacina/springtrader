@@ -31,7 +31,7 @@ spec:
             cpu: "256m"
           limits:
             memory: "2000Mi"
-            cpu: "512m"
+            cpu: "1"
         env:
         - name: GROOVY_HOME
           value: '/usr/bin'
@@ -47,6 +47,18 @@ spec:
             port: 8080
           initialDelaySeconds: 90
           timeoutSeconds: 5
+        livenessProbe:
+          httpGet:
+            path: /spring-nanotrader-services/api/marketSummary
+            port: 8080
+          initialDelaySeconds: 90
+          timeoutSeconds: 5
+        readinessProbe:
+          httpGet:
+            path: /spring-nanotrader-services/api/marketSummary
+            port: 8080
+          initialDelaySeconds: 90
+          timeoutSeconds: 5
       - name: rabbitmq
         image: rabbitmq
         resources:
@@ -55,4 +67,4 @@ spec:
             cpu: "16m"
           limits:
             memory: "256Mi"
-            cpu: "32m"
+            cpu: "100m"

@@ -37,10 +37,10 @@ spec:
         && tail -f /sqlf-data/locator1/sqlflocator.log"]
         resources:
           requests:
-            memory: "512Mi"
+            memory: "384Mi"
             cpu: "96m"
           limits:
-            memory: "1024Mi"
+            memory: "512Mi"
             cpu: "256m"
         strategy: 
           type: recreate

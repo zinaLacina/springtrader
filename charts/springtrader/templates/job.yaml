@@ -22,10 +22,10 @@ spec:
         resources:
           requests:
             memory: "192Mi"
-            cpu: "1m"
+            cpu: "32m"
           limits:
             memory: "384Mi"
-            cpu: "16m"
+            cpu: "256m"
       restartPolicy: OnFailure
 ---
 apiVersion: batch/v1
@@ -53,8 +53,8 @@ spec:
         resources:
           requests:
             memory: "192Mi"
-            cpu: "1m"
+            cpu: "32m"
           limits:
             memory: "384Mi"
-            cpu: "16m"
+            cpu: "256m"
       restartPolicy: OnFailure
