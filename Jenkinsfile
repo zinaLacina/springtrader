@@ -99,7 +99,7 @@ pipeline {
       }
       post {
         success {
-          notifyStageEnd([status: "Successfully deployed to production:\nspringtrader.${env.productionNamespace}/spring-nanotrader-web/"])
+          notifyStageEnd([status: "Successfully deployed to production:\nspringtrader.${env.productionDomain}/spring-nanotrader-web/"])
         }
         failure {
           notifyStageEnd([result: "fail"])
