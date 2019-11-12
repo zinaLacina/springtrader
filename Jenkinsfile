@@ -2,9 +2,9 @@ library 'LEAD'
 pipeline {
   agent none
   stages {
-    stage('Initialization'){ 
+    stage('Initialization'){
       agent {label 'master'}
-      steps {notifyPipelineStart()}
+      steps {echo "Pipeline Start"}
     }
     /// [build]
     stage('Build') {
@@ -12,19 +12,10 @@ pipeline {
         label "lead-toolchain-skaffold"
       }
       steps {
-        notifyStageStart()
         container('skaffold') {
           sh "skaffold build --file-output=image.json"
           stash includes: 'image.json', name: 'build'
           sh "rm image.json"
-        }
-      }
-      post {
-        success {
-          notifyStageEnd()
-        }
-        failure {
-          notifyStageEnd([result: "fail"])
         }
       }
     }
@@ -43,18 +34,9 @@ pipeline {
         ISTIO_DOMAIN   = "${env.stagingDomain}"
       }
       steps {
-        notifyStageStart()
         container('skaffold') {
           unstash 'build'
           sh "skaffold deploy -a image.json -n ${TILLER_NAMESPACE}"
-        }
-      }
-      post {
-        success {
-          notifyStageEnd([status: "Successfully deployed to staging:\nspringtrader.${env.stagingDomain}/spring-nanotrader-web/"])
-        }
-        failure {
-          notifyStageEnd([result: "fail"])
         }
       }
     }
@@ -91,31 +73,12 @@ pipeline {
         ISTIO_DOMAIN   = "${env.productionDomain}"
       }
       steps {
-        notifyStageStart()
         container('skaffold') {
           unstash 'build'
           sh "skaffold deploy -a image.json -n ${TILLER_NAMESPACE}"
         }
       }
-      post {
-        success {
-          notifyStageEnd([status: "Successfully deployed to production:\nspringtrader.${env.productionDomain}/spring-nanotrader-web/"])
-        }
-        failure {
-          notifyStageEnd([result: "fail"])
-        }
-      }
     }
     /// [prod]
-  }
-  post {
-    success {
-      echo "Pipeline Success"
-      notifyPipelineEnd()
-    }
-    failure {
-      echo "Pipeline Fail"
-      notifyPipelineEnd([result: "fail"])
-    }
   }
 }
