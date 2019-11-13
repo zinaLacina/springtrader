@@ -11,7 +11,6 @@ pipeline {
           sh "skaffold build --file-output=image.json"
           stash includes: 'image.json', name: 'build'
           sh "rm image.json"
-          stageMessage "Successfully deployed to staging:\nspringtrader.${env.stagingDomain}/spring-nanotrader-web/"
         }
       }
     }
@@ -33,7 +32,7 @@ pipeline {
         container('skaffold') {
           unstash 'build'
           sh "skaffold deploy -a image.json -n ${TILLER_NAMESPACE}"
-          stageMessage "Successfully deployed to production:\nspringtrader.${env.productionDomain}/spring-nanotrader-web/"
+          stageMessage "Successfully deployed to staging:\nspringtrader.${env.stagingDomain}/spring-nanotrader-web/"
         }
       }
     }
@@ -73,6 +72,7 @@ pipeline {
         container('skaffold') {
           unstash 'build'
           sh "skaffold deploy -a image.json -n ${TILLER_NAMESPACE}"
+          stageMessage "Successfully deployed to production:\nspringtrader.${env.productionDomain}/spring-nanotrader-web/"
         }
       }
     }
