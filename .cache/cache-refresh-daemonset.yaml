@@ -1,0 +1,29 @@
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: springtrader-cache-refresh
+  labels:
+    k8s-app: springtrader-cache-refresh
+spec:
+  selector:
+    matchLabels:
+      name: springtrader-cache-refresh
+  template:
+    metadata:
+      labels:
+        name: springtrader-cache-refresh
+    spec:
+      containers:
+      - name: springtrader-cache-refresh
+        image: artifactory.toolchain.lead.prod.liatr.io/docker-registry/flywheel/builder-image-skaffold:v1.1.1-1-g6b3c49e
+        command: ["/bin/sh"]
+        args: ["-c", "while true; do docker pull artifactory.toolchain.lead.prod.liatr.io/docker-registry/liatrio/springtrader-builder:latest; docker pull artifactory.toolchain.lead.prod.liatr.io/docker-registry/liatrio/springtrader-runner:latest; sleep 600; done"]
+        volumeMounts:
+        - mountPath: /var/run/docker.sock
+          name: docker
+      volumes:
+      - hostPath:
+          path: /var/run/docker.sock
+          type: ""
+        name: docker
+
