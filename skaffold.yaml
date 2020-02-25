@@ -32,12 +32,12 @@ deploy:
           istioDomain: "{{.ISTIO_DOMAIN}}"
           productName: "{{.PRODUCT_NAME}}"
 profiles:
-- name: microk8s
+- name: kind
   activation:
-  - kubeContext: microk8s
+  - kubeContext: kind-kind
   patches:
   - op: add
     path: /deploy/helm/releases/0/setValues
     value: 
-      storageClassName: microk8s-hostpath
+      storageClassName: standard
 ### [deploy] 
