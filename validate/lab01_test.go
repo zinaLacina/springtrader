@@ -1,39 +1,61 @@
 package validate
 
 import (
-	"io/ioutil"
+  "io/ioutil"
+  "fmt"
+  "os"
 
-	"gopkg.in/yaml.v2"
+  "gopkg.in/yaml.v2"
 
-	. "github.com/onsi/ginkgo"
-	. "github.com/onsi/gomega"
+  . "github.com/onsi/ginkgo"
+  . "github.com/onsi/gomega"
 )
 
 
-var _ = Describe("Lab 1 Containers", func() {
-	Context("Step 2", func() {
-		It("should have a Dockerfile", func() {
-			Expect(fileExists("../Dockerfile")).To(Succeed(), "Dockerfile was not found in the springtrader folder. Maybe the file was not saved or it was saved to a different folder.")
-		})
-	})
 
-	Context("Step 3", func() {
-		It("should have a skaffold.yaml file", func() {
-			Expect(fileExists("../skaffold.yaml")).To(Succeed(), "skaffold.yaml was not found in the springtrader folder. Maybe the file was not saved or it was save in a different folder.")
-			Fail("foo")
-		})
+  var _ = Describe("Lab 1 Containers", func() {
 
-		It("should be a valid skaffold configuration", func() {
-			var skaffold interface{}
-			skaffoldFile, err := ioutil.ReadFile("../skaffold.yaml")
-			if err != nil {
-				Skip("skaffold.yaml not found")
-			}
-			err = yaml.Unmarshal(skaffoldFile, &skaffold)
-			Expect(err).ToNot(HaveOccurred())
-			Expect(treeValue(skaffold, []interface{}{"apiVersion"})).To(Equal("skaffold/v1beta12"))
-			Expect(treeValue(skaffold, []interface{}{"build", "artifacts", 0, "image"})).To(Equal("springtrader"))
-			Expect(treeValue(skaffold, []interface{}{"build", "artifacts", 1, "image"})).To(Equal("sqlfdb"))
-		})
-	})
-})
+    f, err := os.Create("slack_output.md")
+    if err != nil {
+        fmt.Println(err)
+        return
+    }
+    l, err := f.WriteString("Whoops, you're missing a Dockerfile!")
+    if err != nil {
+        fmt.Println(err)
+        f.Close()
+        return
+    }
+    fmt.Println(l, "bytes written successfully")
+    err = f.Close()
+    if err != nil {
+        fmt.Println(err)
+        return
+    }
+
+    Context("Step 2", func() {
+      It("should have a Dockerfile", func() {
+        Expect(fileExists("../Dockerfile")).To(Succeed(), "Dockerfile was not found in the springtrader folder. Maybe the file was not saved or it was saved to a different folder.")
+      })
+    })
+
+    Context("Step 3", func() {
+      It("should have a skaffold.yaml file", func() {
+        Expect(fileExists("../skaffold.yaml")).To(Succeed(), "skaffold.yaml was not found in the springtrader folder. Maybe the file was not saved or it was save in a different folder.")
+        Fail("foo")
+      })
+
+      It("should be a valid skaffold configuration", func() {
+        var skaffold interface{}
+        skaffoldFile, err := ioutil.ReadFile("../skaffold.yaml")
+        if err != nil {
+          Skip("skaffold.yaml not found")
+        }
+        err = yaml.Unmarshal(skaffoldFile, &skaffold)
+        Expect(err).ToNot(HaveOccurred())
+        Expect(treeValue(skaffold, []interface{}{"apiVersion"})).To(Equal("skaffold/v1beta12"))
+        Expect(treeValue(skaffold, []interface{}{"build", "artifacts", 0, "image"})).To(Equal("springtrader"))
+        Expect(treeValue(skaffold, []interface{}{"build", "artifacts", 1, "image"})).To(Equal("sqlfdb"))
+      })
+    })
+  })
