@@ -12,50 +12,52 @@ import (
 )
 
 
+var _ = Describe("Lab 1 Containers", func() {
+	var failMessage string
 
-  var _ = Describe("Lab 1 Containers", func() {
+	BeforeEach(func() {
+		failMessage = ""
+	})
 
-    f, err := os.Create("slack_output.md")
-    if err != nil {
-        fmt.Println(err)
-        return
-    }
-    l, err := f.WriteString("Whoops, you're missing a Dockerfile!")
-    if err != nil {
-        fmt.Println(err)
-        f.Close()
-        return
-    }
-    fmt.Println(l, "bytes written successfully")
-    err = f.Close()
-    if err != nil {
-        fmt.Println(err)
-        return
-    }
+	Context("Step 2", func() {
+		It("should have a Dockerfile", func() {
+			failMessage = "Dockerfile Doesn't Exist or is in the wrong location\n"
+			Expect(fileExists("../Dockerfile")).To(Succeed(), failMessage)
+		})
+	})
 
-    Context("Step 2", func() {
-      It("should have a Dockerfile", func() {
-        Expect(fileExists("../Dockerfile")).To(Succeed(), "Dockerfile was not found in the springtrader folder. Maybe the file was not saved or it was saved to a different folder.")
-      })
-    })
+	Context("Step 3", func() {
+		It("should have a skaffold.yaml file", func() {
+			failMessage = "skaffold.yaml Doesn't Exist or is in the wrong location\n"
+			Expect(fileExists("../skaffold.yaml")).To(Succeed(), failMessage)
+		})
 
-    Context("Step 3", func() {
-      It("should have a skaffold.yaml file", func() {
-        Expect(fileExists("../skaffold.yaml")).To(Succeed(), "skaffold.yaml was not found in the springtrader folder. Maybe the file was not saved or it was save in a different folder.")
-        Fail("foo")
-      })
+		It("should be a valid skaffold configuration", func() {
+			var skaffold interface{}
+			skaffoldFile, err := ioutil.ReadFile("../skaffold.yaml")
+			if err != nil {
+				Skip("skaffold.yaml not found")
+			}
 
-      It("should be a valid skaffold configuration", func() {
-        var skaffold interface{}
-        skaffoldFile, err := ioutil.ReadFile("../skaffold.yaml")
-        if err != nil {
-          Skip("skaffold.yaml not found")
-        }
-        err = yaml.Unmarshal(skaffoldFile, &skaffold)
-        Expect(err).ToNot(HaveOccurred())
-        Expect(treeValue(skaffold, []interface{}{"apiVersion"})).To(Equal("skaffold/v1beta12"))
-        Expect(treeValue(skaffold, []interface{}{"build", "artifacts", 0, "image"})).To(Equal("springtrader"))
-        Expect(treeValue(skaffold, []interface{}{"build", "artifacts", 1, "image"})).To(Equal("sqlfdb"))
-      })
-    })
-  })
+			err = yaml.Unmarshal(skaffoldFile, &skaffold)
+			Expect(err).ToNot(HaveOccurred())
+			//failures := InterceptGomegaFailures(func() {
+
+			failMessage = "Incorrect apiVersion in skaffold.yaml\n"
+			Expect(treeValue(skaffold, []interface{}{"apiVersion"})).To(Equal("skaffold/v1beta12"), failMessage)
+			failMessage = "First build artifact in skaffold.yaml should be \"springtrader\"\n"
+			Expect(treeValue(skaffold, []interface{}{"build", "artifacts", 0, "image"})).To(Equal("springtrader"), failMessage)
+			failMessage = "Second build artifact in skaffold.yaml should be \"sqlfdb\"\n"
+			Expect(treeValue(skaffold, []interface{}{"build", "artifacts", 1, "image"})).To(Equal("sqlfdb"), failMessage)
+			//})
+			//log.Printf(failures[0])
+		})
+	})
+
+	AfterEach(func() {
+		log.Printf("%v\n", CurrentGinkgoTestDescription())
+		if CurrentGinkgoTestDescription().Failed {
+			ConcatenatedMessage += failMessage
+		}
+	})
+})
