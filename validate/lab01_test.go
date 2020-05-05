@@ -2,8 +2,7 @@ package validate
 
 import (
   "io/ioutil"
-  "fmt"
-  "os"
+  "log"
 
   "gopkg.in/yaml.v2"
 
@@ -44,10 +43,13 @@ var _ = Describe("Lab 1 Containers", func() {
 			//failures := InterceptGomegaFailures(func() {
 
 			failMessage = "Incorrect apiVersion in skaffold.yaml\n"
+
 			Expect(treeValue(skaffold, []interface{}{"apiVersion"})).To(Equal("skaffold/v1beta12"), failMessage)
 			failMessage = "First build artifact in skaffold.yaml should be \"springtrader\"\n"
+
 			Expect(treeValue(skaffold, []interface{}{"build", "artifacts", 0, "image"})).To(Equal("springtrader"), failMessage)
 			failMessage = "Second build artifact in skaffold.yaml should be \"sqlfdb\"\n"
+
 			Expect(treeValue(skaffold, []interface{}{"build", "artifacts", 1, "image"})).To(Equal("sqlfdb"), failMessage)
 			//})
 			//log.Printf(failures[0])
